@@ -1,0 +1,23 @@
+{
+  "name": "claude-code-skill",
+  "version": "1.0.0",
+  "description": "OpenClaw skill for running Anthropic Claude Code CLI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "openclaw",
+    "skill",
+    "claude",
+    "claude-code",
+    "coding",
+    "ai",
+    "agent"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "openclaw": ">=1.0.0"
+  }
+}
