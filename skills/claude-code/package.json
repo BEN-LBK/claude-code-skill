@@ -1,7 +1,7 @@
 {
   "name": "claude-code-skill",
-  "version": "1.0.0",
-  "description": "OpenClaw skill for running Anthropic Claude Code CLI",
+  "version": "1.1.0",
+  "description": "OpenClaw skill for running Anthropic Claude Code CLI with Spec-Driven Development support (OpenSpec & Spec Kit)",
   "main": "index.js",
   "scripts": {
     "test": "echo 'No tests configured'"
@@ -13,7 +13,10 @@
     "claude-code",
     "coding",
     "ai",
-    "agent"
+    "agent",
+    "openspec",
+    "spec-kit",
+    "spec-driven-development"
   ],
   "author": "",
   "license": "MIT",

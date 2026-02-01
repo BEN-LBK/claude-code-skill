@@ -23,14 +23,25 @@ Claude Code Skill Helper
 
 Usage: $0 <command> [options]
 
-Commands:
+Basic Commands:
     quick <prompt>        Run a quick one-shot task in current directory
     task <prompt>         Run a background task (returns session ID)
     review                Review current git changes
     fix <description>     Fix a bug or issue
     test                  Run tests via Claude Code
     explain <file>        Explain a file or code section
-    help                  Show this help message
+
+Spec-Driven Development:
+    openspec-new <name>       Start new OpenSpec change
+    openspec-ff               Fast-forward OpenSpec (create all docs)
+    openspec-apply            Apply OpenSpec tasks
+    openspec-archive          Archive OpenSpec change
+    
+    speckit-constitution      Create Spec Kit constitution
+    speckit-specify <desc>    Create Spec Kit specification
+    speckit-plan <desc>       Create Spec Kit plan
+    speckit-tasks             Generate Spec Kit tasks
+    speckit-implement         Implement Spec Kit tasks
 
 Examples:
     $0 quick "Add input validation to login form"
@@ -38,6 +49,18 @@ Examples:
     $0 review
     $0 fix "Memory leak in data processing"
     $0 explain src/auth.js
+    
+    # OpenSpec
+    $0 openspec-new dark-mode
+    $0 openspec-ff
+    $0 openspec-apply
+    
+    # Spec Kit
+    $0 speckit-constitution
+    $0 speckit-specify "Build photo album app"
+    $0 speckit-plan "Use React and Vite"
+    $0 speckit-tasks
+    $0 speckit-implement
 
 Environment Variables:
     CLAUDE_CMD    Path to claude executable (default: claude)
@@ -146,7 +169,7 @@ run_explain() {
     
     if [ -z "$target" ]; then
         echo -e "${RED}Error: Please specify a file or code section${NC}"
-        echo "Usage: $0 explain \u003cfile\u003e"
+        echo "Usage: $0 explain <file>"
         exit 1
     fi
     
@@ -156,6 +179,133 @@ run_explain() {
     
     cd "$workdir"
     "$CLAUDE_CMD" "Explain $target in detail. Include: 1) What it does, 2) How it works, 3) Key components, 4) Any important patterns or design decisions."
+}
+
+# ==================== OpenSpec Commands ====================
+
+# Start new OpenSpec change
+run_openspec_new() {
+    local name="$1"
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    if [ -z "$name" ]; then
+        echo -e "${RED}Error: Please provide a change name${NC}"
+        echo "Usage: $0 openspec-new <change-name>"
+        exit 1
+    fi
+    
+    echo -e "${BLUE}Starting OpenSpec change in: $workdir${NC}"
+    echo -e "${YELLOW}Change name: $name${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/opsx:new $name"
+}
+
+# OpenSpec fast-forward
+run_openspec_ff() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Running OpenSpec fast-forward in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/opsx:ff"
+}
+
+# OpenSpec apply
+run_openspec_apply() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Applying OpenSpec tasks in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/opsx:apply"
+}
+
+# OpenSpec archive
+run_openspec_archive() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Archiving OpenSpec change in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/opsx:archive"
+}
+
+# ==================== Spec Kit Commands ====================
+
+# Spec Kit constitution
+run_speckit_constitution() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Creating Spec Kit constitution in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements"
+}
+
+# Spec Kit specify
+run_speckit_specify() {
+    local description="$1"
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    if [ -z "$description" ]; then
+        echo -e "${RED}Error: Please provide a feature description${NC}"
+        echo "Usage: $0 speckit-specify \"description of feature\""
+        exit 1
+    fi
+    
+    echo -e "${BLUE}Creating Spec Kit specification in: $workdir${NC}"
+    echo -e "${YELLOW}Description: $description${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/speckit.specify $description"
+}
+
+# Spec Kit plan
+run_speckit_plan() {
+    local description="$1"
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    if [ -z "$description" ]; then
+        echo -e "${RED}Error: Please provide plan details${NC}"
+        echo "Usage: $0 speckit-plan \"tech stack and approach\""
+        exit 1
+    fi
+    
+    echo -e "${BLUE}Creating Spec Kit plan in: $workdir${NC}"
+    echo -e "${YELLOW}Plan: $description${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/speckit.plan $description"
+}
+
+# Spec Kit tasks
+run_speckit_tasks() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Generating Spec Kit tasks in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/speckit.tasks"
+}
+
+# Spec Kit implement
+run_speckit_implement() {
+    local workdir="${WORKDIR:-$(pwd)}"
+    
+    echo -e "${BLUE}Implementing Spec Kit tasks in: $workdir${NC}"
+    echo ""
+    
+    cd "$workdir"
+    "$CLAUDE_CMD" "/speckit.implement"
 }
 
 # Main command dispatcher
@@ -197,6 +347,54 @@ main() {
         explain)
             check_claude
             run_explain "$1"
+            ;;
+        # OpenSpec commands
+        openspec-new)
+            check_claude
+            run_openspec_new "$1"
+            ;;
+        openspec-ff)
+            check_claude
+            run_openspec_ff
+            ;;
+        openspec-apply)
+            check_claude
+            run_openspec_apply
+            ;;
+        openspec-archive)
+            check_claude
+            run_openspec_archive
+            ;;
+        # Spec Kit commands
+        speckit-constitution)
+            check_claude
+            run_speckit_constitution
+            ;;
+        speckit-specify)
+            check_claude
+            if [ $# -eq 0 ]; then
+                echo -e "${RED}Error: Please provide a feature description${NC}"
+                echo "Usage: $0 speckit-specify \"description\""
+                exit 1
+            fi
+            run_speckit_specify "$*"
+            ;;
+        speckit-plan)
+            check_claude
+            if [ $# -eq 0 ]; then
+                echo -e "${RED}Error: Please provide plan details${NC}"
+                echo "Usage: $0 speckit-plan \"tech stack\""
+                exit 1
+            fi
+            run_speckit_plan "$*"
+            ;;
+        speckit-tasks)
+            check_claude
+            run_speckit_tasks
+            ;;
+        speckit-implement)
+            check_claude
+            run_speckit_implement
             ;;
         help|--help|-h)
             show_help
